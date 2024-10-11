@@ -26,12 +26,15 @@ function useDragDrop() {
 
     reader.readAsText(files[0]);
   }
+  function onDragLeave() {
+    setStatus("ready");
+  }
 
-  return [onDrag, onDrop, file, status];
+  return [onDrag, onDragLeave, onDrop, file, status];
 }
 
 export function Preview({ opts }) {
-  const [onDrag, onDrop, svg, status] = useDragDrop();
+  const [onDrag, onDragLeave, onDrop, svg, status] = useDragDrop();
 
   const [recolouredFile, setRecolouredFile] = useState(null);
 
@@ -57,6 +60,7 @@ export function Preview({ opts }) {
         transition: "border 0.5s",
       }}
       onDragOver={onDrag}
+      onDragLeave={onDragLeave}
       onDrop={onDrop}
       // FIXME: unsurprisingly for the name of the function, this is an XSS vuln.
       // Maybe render to canvas instead.
