@@ -1,0 +1,49 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  --il-color: #222;
+  --il-background: #ffffff;
+  --il-panel-border: #ccc;
+  --il-panel-background: #eee;
+  --il-toolbar-background: linear-gradient(#ccc, #ddd);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --il-color: #ccc;
+    --il-background: #1a1a1a;
+    --il-panel-background: #3a3a3c;
+    --il-panel-border: #4a4a4c;
+    --il-toolbar-background: linear-gradient(#3a3a3c, #27272a);
+  }
+}
+
+.isolib-app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.isolib-app__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow: auto;
+}

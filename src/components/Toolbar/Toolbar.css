@@ -1,0 +1,36 @@
+.isolib-toolbar {
+  display: flex;
+  border: 1px solid var(--il-panel-border);
+  background: var(--il-toolbar-background);
+  gap: 0.5rem;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.isolib-toolbar__item {
+  padding: 0 0.25rem;
+  background: var(--il-panel-background);
+  border: 1px solid var(--il-panel-border);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.isolib-toolbar__title {
+  font-size: inherit;
+  font-weight: inherit;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem 0 0.5rem;
+  gap: 0.3rem;
+}
+.isolib-toolbar__title-a {
+  font-weight: bold;
+}
+.isolib-toolbar__title-b {
+  opacity: 0.8;
+}
+.isolib-toolbar__nowrap {
+  text-wrap: nowrap;
+}
