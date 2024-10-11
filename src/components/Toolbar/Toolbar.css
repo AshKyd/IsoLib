@@ -31,6 +31,8 @@
 .isolib-toolbar__title-b {
   opacity: 0.8;
 }
-.isolib-toolbar__nowrap {
+.isolib-toolbar__time {
   text-wrap: nowrap;
+  min-width: 4.5em;
+  text-align: right;
 }

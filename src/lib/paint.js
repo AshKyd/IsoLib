@@ -1,5 +1,6 @@
 import Color from "color";
 import config from "./replacements.json";
+import { DAY } from "./time";
 const { colourReplacements, colourWindows, colourNeons } = config;
 console.log({ config });
 
@@ -116,9 +117,11 @@ export function paint(
   svg = recolour(svg, "primary" + flipped, primary);
   svg = recolour(svg, "secondary" + flipped, secondary);
 
+  const hourOfDay = (time % DAY) / (DAY / 24);
+
   if (time) {
     svg = svg.replace(/(#[a-fA-F0-9]{6});/g, function (a, b) {
-      return recolorEvening(a, b, time, { alwayslightup });
+      return recolorEvening(a, b, hourOfDay, { alwayslightup });
     });
   }
 

@@ -1,5 +1,6 @@
 import { useEffect } from "preact/hooks";
 import "./Toolbar.css";
+import { DAY, HOUR } from "../../lib/time";
 const DEFAULTS = {
   flip: false,
   primary: "#aaaaaa",
@@ -7,6 +8,14 @@ const DEFAULTS = {
   time: 0,
   alwayslightup: false,
 };
+
+function getNiceTime(time) {
+  const d = new Date(time);
+  const hours = d.getUTCHours();
+  return `${String(hours).padStart(2, "0")}:${String(
+    d.getUTCMinutes()
+  ).padStart(2, "0")} ${hours < 12 ? "AM" : "PM"}`;
+}
 export default function Toolbar({ value, onChange }) {
   useEffect(() => {
     if (!Object.keys(value).length) onChange(DEFAULTS);
@@ -19,15 +28,15 @@ export default function Toolbar({ value, onChange }) {
         <span class="isolib-toolbar__title-b">recolouriser</span>
       </h1>
       <label for="time" className="isolib-toolbar__item">
-        Hour <span class="isolib-toolbar__nowrap">(0-23)</span>
+        Hour <span class="isolib-toolbar__time">{getNiceTime(value.time)}</span>
         <input
           type="range"
           min="0"
-          max="239900"
+          max={DAY}
           id="time"
-          value={value.time * 10000}
-          onChange={(e) => onChange({ ...value, time: e.target.value / 10000 })}
-          step="5000"
+          value={value.time}
+          onChange={(e) => onChange({ ...value, time: Number(e.target.value) })}
+          step={HOUR / 2}
         />
       </label>
       <div className="isolib-toolbar__item">
