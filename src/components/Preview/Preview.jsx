@@ -19,15 +19,11 @@ function useDragDrop() {
 
     const reader = new FileReader();
 
-    // Closure to capture the file information.
-    reader.onload = (function (theFile) {
-      return function (e) {
-        setFile(e.target.result);
-        setStatus("done");
-      };
-    })(files[0]);
+    reader.onload = function (e) {
+      setFile(e.target.result);
+      setStatus("done");
+    };
 
-    // Read in the image file as a data URL.
     reader.readAsText(files[0]);
   }
 
@@ -62,6 +58,8 @@ export function Preview({ opts }) {
       }}
       onDragOver={onDrag}
       onDrop={onDrop}
+      // FIXME: unsurprisingly for the name of the function, this is an XSS vuln.
+      // Maybe render to canvas instead.
       dangerouslySetInnerHTML={{ __html: recolouredFile || "" }}
     ></div>
   );
