@@ -66,15 +66,21 @@ export default function Toolbar({ value, onChange, file }) {
           onChange={(e) => onChange({ ...value, flip: e.target.checked })}
         />
       </label>
-      <button
-        className="isolib-toolbar__item"
-        onClick={(e) => {
-          e.preventDefault();
-          getNadir(file).then(console.log);
-        }}
-      >
-        Get nadir
-      </button>
+      <label for="time" className="isolib-toolbar__item">
+        Zoom{" "}
+        <span style={{ minWidth: "2em", textAlign: "right" }}>
+          {value.zoom}
+        </span>
+        <input
+          type="range"
+          min="0.5"
+          max={3}
+          id="zoom"
+          value={value.zoom}
+          onChange={(e) => onChange({ ...value, zoom: Number(e.target.value) })}
+          step={0.1}
+        />
+      </label>
     </form>
   );
 }

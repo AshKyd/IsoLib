@@ -37,27 +37,29 @@ function useDragDrop() {
   return [onDrag, onDragLeave, onDrop, file, status];
 }
 
-function drawGrid(canvas, ctx, from) {
+function drawGrid(canvas, ctx, from, zoom) {
   console.log("drawing from", from);
   ctx.lineWidth = 1;
   ctx.strokeStyle = "#005555";
 
+  const gridWidth = GRID_WIDTH * zoom;
+
   for (
-    let i = 0 - (canvas.width % GRID_WIDTH) * 2;
-    i < canvas.width % GRID_WIDTH;
+    let i = 0 - (canvas.width % gridWidth) * 2;
+    i < canvas.width % gridWidth;
     i++
   ) {
-    const xStart = (from[0] % GRID_WIDTH) + GRID_WIDTH * i;
-    const yStart = from[1] % GRID_WIDTH;
+    const xStart = (from[0] % gridWidth) + gridWidth * i;
+    const yStart = from[1] % gridWidth;
     ctx.beginPath();
     ctx.moveTo(xStart, yStart);
     ctx.lineTo(xStart + canvas.height * 2, yStart + canvas.height);
     ctx.stroke();
   }
 
-  for (let i = 0; i < (canvas.width % GRID_WIDTH) * 2.5; i++) {
-    const xStart = (from[0] % GRID_WIDTH) + GRID_WIDTH * i;
-    const yStart = from[1] % GRID_WIDTH;
+  for (let i = 0; i < (canvas.width % gridWidth) * 2.5; i++) {
+    const xStart = (from[0] % gridWidth) + gridWidth * i;
+    const yStart = from[1] % gridWidth;
     ctx.beginPath();
     console.log(xStart, yStart);
     ctx.moveTo(xStart, yStart);
@@ -68,6 +70,7 @@ function drawGrid(canvas, ctx, from) {
 
 export function Preview({ opts, setFile }) {
   const [onDrag, onDragLeave, onDrop, svg, status] = useDragDrop();
+  const zoom = opts.zoom || 1;
 
   const [recolouredFile, setRecolouredFile] = useState(null);
   const canvasRef = useRef();
@@ -120,18 +123,25 @@ export function Preview({ opts, setFile }) {
       });
 
       const context = canvasRef.current.getContext("2d");
-      console.log(canvasRef.current.width, canvasRef.current.height);
 
-      const x = dims.width / 2 - img.width / 2;
-      const y = dims.height / 2 - img.height / 2;
+      const imgWidth = img.width * zoom;
+      const imgHeight = img.height * zoom;
+
+      const x = dims.width / 2 - imgWidth / 2;
+      const y = dims.height / 2 - imgHeight / 2;
       context.fillStyle = "black";
       context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
       const nadir = await getNadir(recolouredFile);
-      drawGrid(canvasRef.current, context, [nadir[0] + x, nadir[1] + y]);
-      context.drawImage(img, x, y);
+      drawGrid(
+        canvasRef.current,
+        context,
+        [nadir[0] * zoom + x, nadir[1] * zoom + y],
+        zoom
+      );
+      context.drawImage(img, x, y, imgWidth, imgHeight);
     })();
-  }, [recolouredFile, dims]);
+  }, [recolouredFile, dims, zoom]);
 
   console.log();
   return (
