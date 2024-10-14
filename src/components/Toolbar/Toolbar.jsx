@@ -1,6 +1,7 @@
 import { useEffect } from "preact/hooks";
 import "./Toolbar.css";
 import { DAY, HOUR } from "../../lib/time";
+import { getNadir } from "../../lib/rectify";
 const DEFAULTS = {
   flip: false,
   primary: "#aaaaaa",
@@ -16,7 +17,7 @@ function getNiceTime(time) {
     d.getUTCMinutes()
   ).padStart(2, "0")} ${hours < 12 ? "AM" : "PM"}`;
 }
-export default function Toolbar({ value, onChange }) {
+export default function Toolbar({ value, onChange, file }) {
   useEffect(() => {
     if (!Object.keys(value).length) onChange(DEFAULTS);
   }, []);
@@ -65,6 +66,15 @@ export default function Toolbar({ value, onChange }) {
           onChange={(e) => onChange({ ...value, flip: e.target.checked })}
         />
       </label>
+      <button
+        className="isolib-toolbar__item"
+        onClick={(e) => {
+          e.preventDefault();
+          getNadir(file).then(console.log);
+        }}
+      >
+        Get nadir
+      </button>
     </form>
   );
 }

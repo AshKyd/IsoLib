@@ -7,8 +7,11 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"canvg": "^4.0.2",
 		"color": "^4.2.3",
-		"preact": "^10.22.1"
+		"npm": "^10.9.0",
+		"preact": "^10.22.1",
+		"sax": "^1.4.1"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.9.0",

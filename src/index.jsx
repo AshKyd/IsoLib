@@ -7,11 +7,12 @@ import { useState } from "preact/hooks";
 
 export function App() {
   const [opts, setOpts] = useState({});
+  const [file, setFile] = useState(null);
   return (
     <div class="isolib-app">
-      <Toolbar value={opts} onChange={setOpts} />
+      <Toolbar value={opts} onChange={setOpts} file={file} />
       <div class="isolib-app__main">
-        <Preview opts={opts} />
+        <Preview file={file} setFile={setFile} opts={opts} />
       </div>
     </div>
   );

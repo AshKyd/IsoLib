@@ -112,7 +112,6 @@ export function paint(
   svg,
   { flip, primary, secondary, time, alwayslightup = false }
 ) {
-  console.log("paint with", arguments[0]);
   var flipped = flip ? "Alt" : "";
   svg = recolour(svg, "primary" + flipped, primary);
   svg = recolour(svg, "secondary" + flipped, secondary);
