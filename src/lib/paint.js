@@ -2,7 +2,6 @@ import Color from "color";
 import config from "./replacements.json";
 import { DAY } from "./time";
 const { colourReplacements, colourWindows, colourNeons } = config;
-console.log({ config });
 
 function makeReplacement(haystack, type, before, after) {
   const search = new RegExp(type + ":" + before, "g");

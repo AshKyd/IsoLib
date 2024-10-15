@@ -37,8 +37,11 @@ function useDragDrop() {
   return [onDrag, onDragLeave, onDrop, file, status];
 }
 
+/**
+ * Draw an isometric grid from the given nadir.
+ * This is a bit dodgy but works well enough for the purposes.
+ */
 function drawGrid(canvas, ctx, from, zoom) {
-  console.log("drawing from", from);
   ctx.lineWidth = 1;
   ctx.strokeStyle = "#005555";
 
@@ -61,7 +64,6 @@ function drawGrid(canvas, ctx, from, zoom) {
     const xStart = (from[0] % gridWidth) + gridWidth * i;
     const yStart = from[1] % gridWidth;
     ctx.beginPath();
-    console.log(xStart, yStart);
     ctx.moveTo(xStart, yStart);
     ctx.lineTo(xStart - canvas.height * 2, yStart + canvas.height);
     ctx.stroke();
@@ -88,6 +90,7 @@ export function Preview({ opts, setFile }) {
     setRecolouredFile(newFile);
   }, [svg, opts]);
 
+  // update dims on window resize
   useEffect(() => {
     const listener = () => {
       const rect = document
@@ -104,6 +107,7 @@ export function Preview({ opts, setFile }) {
     return () => window.removeEventListener("resize", listener);
   }, []);
 
+  // draw graphic
   useEffect(() => {
     if (!recolouredFile) {
       return;
@@ -143,7 +147,6 @@ export function Preview({ opts, setFile }) {
     })();
   }, [recolouredFile, dims, zoom]);
 
-  console.log();
   return (
     <div
       style={{

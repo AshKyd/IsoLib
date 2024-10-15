@@ -1,13 +1,13 @@
 import { useEffect } from "preact/hooks";
 import "./Toolbar.css";
 import { DAY, HOUR } from "../../lib/time";
-import { getNadir } from "../../lib/rectify";
 const DEFAULTS = {
   flip: false,
   primary: "#aaaaaa",
   secondary: "#6BBBF5",
   time: 0,
   alwayslightup: false,
+  zoom: window.devicePixelRatio,
 };
 
 function getNiceTime(time) {
@@ -40,23 +40,23 @@ export default function Toolbar({ value, onChange, file }) {
           step={HOUR / 2}
         />
       </label>
-      <div className="isolib-toolbar__item">
-        <input
-          type="color"
-          value={value.primary}
-          onChange={(e) => onChange({ ...value, primary: e.target.value })}
-          id="col1"
-        />
-      </div>
 
-      <div className="isolib-toolbar__item">
-        <input
-          type="color"
-          value={value.secondary}
-          onChange={(e) => onChange({ ...value, secondary: e.target.value })}
-          id="col2"
-        />
-      </div>
+      <input
+        className="isolib-toolbar__item"
+        type="color"
+        value={value.primary}
+        onChange={(e) => onChange({ ...value, primary: e.target.value })}
+        id="col1"
+      />
+
+      <input
+        className="isolib-toolbar__item"
+        type="color"
+        value={value.secondary}
+        onChange={(e) => onChange({ ...value, secondary: e.target.value })}
+        id="col2"
+      />
+
       <label for="flipped" className="isolib-toolbar__item">
         Flip
         <input
@@ -74,7 +74,7 @@ export default function Toolbar({ value, onChange, file }) {
         <input
           type="range"
           min="0.5"
-          max={3}
+          max={5}
           id="zoom"
           value={value.zoom}
           onChange={(e) => onChange({ ...value, zoom: Number(e.target.value) })}
