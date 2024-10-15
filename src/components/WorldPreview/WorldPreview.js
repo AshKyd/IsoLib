@@ -81,7 +81,7 @@ export default function WorldPreview({ dims, svg, zoom }) {
       context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
       const tiles = [];
-      const tileCount = 4;
+      const tileCount = 6;
       for (let x = 0; x < tileCount; x++) {
         for (let y = 0; y < tileCount; y++) {
           tiles.push({ coord: [x, y], ...baseTileDef });
@@ -93,12 +93,12 @@ export default function WorldPreview({ dims, svg, zoom }) {
         zoom,
         translate: [
           ((img.width * nadir[0]) / 2) * zoom + dims.width / 2,
-          img.height * nadir[1] * zoom,
+          (img.height - TILE_WIDTH * 1.5) * zoom,
         ],
         sprites: [
           ...tiles,
           {
-            coord: [1, 1],
+            coord: [3, 3],
             width: img.width,
             height: img.height,
             nadir: nadir,
