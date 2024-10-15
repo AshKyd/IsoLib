@@ -41,8 +41,8 @@ export async function getNadir(svg) {
     // console.log(`rgba(${[r, g, b, a].join()})`);
     if (a !== 0) {
       // this is the first non-empty pixel we're looking for.
-      const x = (i / 4) % canvas.width;
-      const y = Math.floor(i / canvas.width / 4);
+      const x = ((i / 4) % canvas.width) / canvas.width;
+      const y = Math.floor(i / canvas.width / 4) / canvas.height;
       return [x, y];
     }
   }

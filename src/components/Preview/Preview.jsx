@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { paint } from "../../lib/paint";
+import { paint } from "../../lib/recolour";
 import * as Canvg from "canvg";
 import { getDims, getNadir } from "../../lib/rectify";
-
-const GRID_WIDTH = 64;
+import { loadImage } from "../../lib/util";
+import WorldPreview from "../WorldPreview/WorldPreview";
 
 function useDragDrop() {
   const [status, setStatus] = useState("ready");
@@ -35,39 +35,6 @@ function useDragDrop() {
   }
 
   return [onDrag, onDragLeave, onDrop, file, status];
-}
-
-/**
- * Draw an isometric grid from the given nadir.
- * This is a bit dodgy but works well enough for the purposes.
- */
-function drawGrid(canvas, ctx, from, zoom) {
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "#005555";
-
-  const gridWidth = GRID_WIDTH * zoom;
-
-  for (
-    let i = 0 - (canvas.width % gridWidth) * 2;
-    i < canvas.width % gridWidth;
-    i++
-  ) {
-    const xStart = (from[0] % gridWidth) + gridWidth * i;
-    const yStart = from[1] % gridWidth;
-    ctx.beginPath();
-    ctx.moveTo(xStart, yStart);
-    ctx.lineTo(xStart + canvas.height * 2, yStart + canvas.height);
-    ctx.stroke();
-  }
-
-  for (let i = 0; i < (canvas.width % gridWidth) * 2.5; i++) {
-    const xStart = (from[0] % gridWidth) + gridWidth * i;
-    const yStart = from[1] % gridWidth;
-    ctx.beginPath();
-    ctx.moveTo(xStart, yStart);
-    ctx.lineTo(xStart - canvas.height * 2, yStart + canvas.height);
-    ctx.stroke();
-  }
 }
 
 export function Preview({ opts, setFile }) {
@@ -107,46 +74,6 @@ export function Preview({ opts, setFile }) {
     return () => window.removeEventListener("resize", listener);
   }, []);
 
-  // draw graphic
-  useEffect(() => {
-    if (!recolouredFile) {
-      return;
-    }
-    (async () => {
-      if (!recolouredFile) {
-        return;
-      }
-      const img = await new Promise((resolve, reject) => {
-        const img = document.createElement("img");
-        img.addEventListener("error", (e) => {
-          console.error("image failed to load", e);
-          reject(e);
-        });
-        img.addEventListener("load", () => resolve(img));
-        img.src = "data:image/svg+xml;base64," + btoa(recolouredFile || "");
-      });
-
-      const context = canvasRef.current.getContext("2d");
-
-      const imgWidth = img.width * zoom;
-      const imgHeight = img.height * zoom;
-
-      const x = dims.width / 2 - imgWidth / 2;
-      const y = dims.height / 2 - imgHeight / 2;
-      context.fillStyle = "black";
-      context.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-      const nadir = await getNadir(recolouredFile);
-      drawGrid(
-        canvasRef.current,
-        context,
-        [nadir[0] * zoom + x, nadir[1] * zoom + y],
-        zoom
-      );
-      context.drawImage(img, x, y, imgWidth, imgHeight);
-    })();
-  }, [recolouredFile, dims, zoom]);
-
   return (
     <div
       style={{
@@ -160,15 +87,9 @@ export function Preview({ opts, setFile }) {
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      <canvas
-        ref={canvasRef}
-        width={dims.width}
-        height={dims.height}
-        style={{
-          width: dims.width / 2 + "px",
-          height: dims.height / 2 + "px",
-        }}
-      />
+      {recolouredFile && (
+        <WorldPreview dims={dims} svg={recolouredFile} zoom={zoom} />
+      )}
     </div>
   );
 }
