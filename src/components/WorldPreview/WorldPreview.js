@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { browserLoadCanvas, getLoc, browserLoadImage } from "../../lib/util";
 import { getNadir } from "../../lib/rectify";
 import { tileify } from "../../lib/tileify";
+import { usePan } from "./usePan";
 
 const TILE_WIDTH = 256;
 
@@ -56,12 +57,18 @@ function renderSprites({ context, sprites = [], zoom, translate = [0, 0] }) {
 export default function WorldPreview({ dims, svg, zoom }) {
   const canvasRef = useRef();
 
+  const [handlers, translate, setTranslate] = usePan([0, 0], zoom);
+
   const [baseTile, setBaseTile] = useState(document.createElement("img"));
   useEffect(() => {
     browserLoadCanvas({ src: "/tile.png" }).then((baseTileSrc) =>
       setBaseTile(tileify(baseTileSrc))
     );
   }, []);
+
+  useEffect(() => {
+    setTranslate([0, 0]);
+  }, [svg]);
 
   // draw graphic
   useEffect(() => {
@@ -88,13 +95,15 @@ export default function WorldPreview({ dims, svg, zoom }) {
         }
       }
 
+      const newTranslate = [
+        ((img.width * nadir[0]) / 2) * zoom + dims.width / 2 - translate[0],
+        (img.height - TILE_WIDTH * 1.5) * zoom - translate[1],
+      ];
+
       renderSprites({
         context,
         zoom,
-        translate: [
-          ((img.width * nadir[0]) / 2) * zoom + dims.width / 2,
-          (img.height - TILE_WIDTH * 1.5) * zoom,
-        ],
+        translate: newTranslate,
         sprites: [
           ...tiles,
           {
@@ -107,12 +116,13 @@ export default function WorldPreview({ dims, svg, zoom }) {
         ],
       });
     })();
-  }, [svg, dims, zoom, baseTile]);
+  }, [svg, dims, zoom, baseTile, translate]);
   return (
     <canvas
       ref={canvasRef}
       width={dims.width}
       height={dims.height}
+      {...handlers}
       style={{
         width: dims.width / 2 + "px",
         height: dims.height / 2 + "px",

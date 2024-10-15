@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { paint } from "../../lib/recolour";
-import * as Canvg from "canvg";
-import { getDims, getNadir } from "../../lib/rectify";
-import { loadImage } from "../../lib/util";
 import WorldPreview from "../WorldPreview/WorldPreview";
 
 function useDragDrop() {
