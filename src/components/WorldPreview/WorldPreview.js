@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { browserLoadCanvas, getLoc, browserLoadImage } from "../../lib/util";
-import { getNadir } from "../../lib/rectify";
+import { getDims, getNadir } from "../../lib/rectify";
 import { tileify } from "../../lib/tileify";
 import { usePan } from "./usePan";
 
@@ -56,7 +56,7 @@ function renderSprites({ context, sprites = [], zoom, translate = [0, 0] }) {
 
 export default function WorldPreview({ dims, svg, zoom }) {
   const canvasRef = useRef();
-
+  const [imgDims, setImgDims] = useState([0, 0]);
   const [handlers, translate, setTranslate] = usePan([0, 0], zoom);
 
   const [baseTile, setBaseTile] = useState(document.createElement("img"));
@@ -67,11 +67,17 @@ export default function WorldPreview({ dims, svg, zoom }) {
   }, []);
 
   useEffect(() => {
+    console.log("        setting transl8");
     setTranslate([0, 0]);
+  }, imgDims);
+
+  useEffect(() => {
+    getDims(svg).then(setImgDims);
   }, [svg]);
 
   // draw graphic
   useEffect(() => {
+    if (!canvasRef.current) return;
     (async () => {
       const img = await browserLoadImage({ svg });
       const nadir = await getNadir(svg);
