@@ -38,11 +38,25 @@ body {
   height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .isolib-app__main {
   flex: 1;
+  position: relative;
+}
+.isolib-app__main-child {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.isolib-app__preview {
+  flex: 1;
   overflow: hidden;
+}
+.isolib-app__picker {
 }

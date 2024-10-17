@@ -34,8 +34,8 @@ function useDragDrop() {
   return [onDrag, onDragLeave, onDrop, file, status];
 }
 
-export function Preview({ opts, setFile }) {
-  const [onDrag, onDragLeave, onDrop, svg, status] = useDragDrop();
+export function Preview({ file, opts, setFile }) {
+  const [onDrag, onDragLeave, onDrop, _svg, status] = useDragDrop();
   const zoom = opts.zoom || 1;
 
   const [recolouredFile, setRecolouredFile] = useState(null);
@@ -43,32 +43,41 @@ export function Preview({ opts, setFile }) {
 
   const [dims, setDims] = useState({ width: 100, height: 100 });
 
-  useEffect(() => setFile(svg), [svg]);
+  useEffect(() => setFile(file), [file]);
 
   useEffect(() => {
-    if (!svg) {
+    if (!file) {
       return;
     }
 
-    const newFile = paint(svg, opts);
+    const newFile = paint(file, opts);
     setRecolouredFile(newFile);
-  }, [svg, opts]);
+  }, [file, opts]);
 
   // update dims on window resize
   useEffect(() => {
-    const listener = () => {
-      const rect = document
-        .querySelector(".isolib-app__main")
-        .getBoundingClientRect();
+    const observer = new ResizeObserver(([entry]) => {
       setDims({
-        width: rect.width * window.devicePixelRatio,
-        height: rect.height * window.devicePixelRatio,
+        width: entry.contentRect.width * window.devicePixelRatio,
+        height: entry.contentRect.height * window.devicePixelRatio,
       });
-    };
-    listener();
-    window.addEventListener("resize", listener);
+      console.log("resigingin");
+    });
+    observer.observe(document.querySelector(".isolib-app__preview"));
 
-    return () => window.removeEventListener("resize", listener);
+    // const listener = () => {
+    //   const rect = document
+    //     .querySelector(".isolib-app__preview")
+    //     .getBoundingClientRect();
+    //   setDims({
+    //     width: rect.width * window.devicePixelRatio,
+    //     height: rect.height * window.devicePixelRatio,
+    //   });
+    // };
+    // listener();
+    // window.addEventListener("resize", listener);
+
+    return () => observer.disconnect();
   }, []);
 
   return (

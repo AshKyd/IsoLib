@@ -67,7 +67,6 @@ export default function WorldPreview({ dims, svg, zoom }) {
   }, []);
 
   useEffect(() => {
-    console.log("        setting transl8");
     setTranslate([0, 0]);
   }, imgDims);
 
