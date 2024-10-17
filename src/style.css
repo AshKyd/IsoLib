@@ -60,3 +60,29 @@ body {
 }
 .isolib-app__picker {
 }
+
+@media (max-width: 720px) {
+  .isolib-app__sidebar {
+    width: 100vw;
+  }
+  .isolib-app__main-child {
+    transition: transform 0.5s;
+    transform: translateX(-100vw);
+    width: 200vw;
+  }
+  .isolib-app__main-child--sidebar {
+    transform: translateX(0);
+  }
+  .isolib-app__sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+  }
+}
+@media (min-width: 720px) {
+  .isolib-app__sidebar-toggle {
+    display: none;
+  }
+}

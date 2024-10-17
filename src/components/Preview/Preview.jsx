@@ -56,13 +56,17 @@ export function Preview({ file, opts, setFile }) {
 
   // update dims on window resize
   useEffect(() => {
-    const observer = new ResizeObserver(([entry]) => {
-      setDims({
-        width: entry.contentRect.width * window.devicePixelRatio,
-        height: entry.contentRect.height * window.devicePixelRatio,
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.contentRect.width) {
+          setDims({
+            width: entry.contentRect.width * window.devicePixelRatio,
+            height: entry.contentRect.height * window.devicePixelRatio,
+          });
+        }
       });
-      console.log("resigingin");
     });
+    observer.observe(document.querySelector(".isolib-app__main"));
     observer.observe(document.querySelector(".isolib-app__preview"));
 
     // const listener = () => {

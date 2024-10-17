@@ -5,7 +5,7 @@ const DEFAULTS = {
   flip: false,
   primary: "#aaaaaa",
   secondary: "#6BBBF5",
-  time: 0,
+  time: 1000 * 60 * 60 * 12,
   alwayslightup: false,
   zoom: window.devicePixelRatio,
 };
@@ -17,13 +17,36 @@ function getNiceTime(time) {
     d.getUTCMinutes()
   ).padStart(2, "0")} ${hours < 12 ? "AM" : "PM"}`;
 }
-export default function Toolbar({ value, onChange, file }) {
+export default function Toolbar({
+  value,
+  onChange,
+  sidebarOpen,
+  setSidebarOpen,
+}) {
   useEffect(() => {
     if (!Object.keys(value).length) onChange(DEFAULTS);
   }, []);
 
   return (
     <form className="isolib-toolbar">
+      <button
+        class="isolib-app__sidebar-toggle"
+        onClick={(e) => {
+          e.preventDefault();
+          setSidebarOpen(!sidebarOpen);
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-three-dots"
+          viewBox="0 0 16 16"
+        >
+          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+        </svg>
+      </button>
       <h1 className="isolib-toolbar__title">
         <span class="isolib-toolbar__title-a">IsoLib</span>{" "}
         <span class="isolib-toolbar__title-b">recolouriser</span>

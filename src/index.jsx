@@ -11,6 +11,7 @@ export function App() {
   const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
   const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     if (!fileUrl) {
@@ -21,14 +22,34 @@ export function App() {
       .then(setFile)
       .catch(setError);
   }, [fileUrl]);
+
   return (
     <div class="isolib-app">
-      <Toolbar value={opts} onChange={setOpts} file={file} />
+      <Toolbar
+        value={opts}
+        onChange={setOpts}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
       <div class="error">{!!error && error.message}</div>
       <div class="isolib-app__main">
-        <div class="isolib-app__main-child">
-          <div class="isolib-app__picker">
-            <Picker value={fileUrl} onChange={setFileUrl} onError={setError} />
+        <div
+          class={[
+            "isolib-app__main-child",
+            sidebarOpen && "isolib-app__main-child--sidebar",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <div class="isolib-app__sidebar">
+            <Picker
+              value={fileUrl}
+              onChange={(val) => {
+                setFileUrl(val);
+                setSidebarOpen(false);
+              }}
+              onError={setError}
+            />
           </div>
           <div class="isolib-app__preview">
             <Preview
