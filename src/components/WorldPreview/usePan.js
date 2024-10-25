@@ -27,8 +27,8 @@ export function usePan(initialTranslate = [0, 0], zoom = 1) {
         var xOffset = startPos.current[0] - cursorPos[0];
         var yOffset = startPos.current[1] - cursorPos[1];
         setTranslate((translate) => [
-          translate[0] + xOffset * zoom,
-          translate[1] + yOffset * zoom,
+          translate[0] + xOffset / zoom,
+          translate[1] + yOffset / zoom,
         ]);
 
         if (xOffset || yOffset) {

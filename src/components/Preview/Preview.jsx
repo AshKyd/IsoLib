@@ -60,8 +60,8 @@ export function Preview({ file, opts, setFile }) {
       entries.forEach((entry) => {
         if (entry.contentRect.width) {
           setDims({
-            width: entry.contentRect.width * window.devicePixelRatio,
-            height: entry.contentRect.height * window.devicePixelRatio,
+            width: entry.contentRect.width,
+            height: entry.contentRect.height,
           });
         }
       });
