@@ -44,7 +44,6 @@ export function Preview({ file, opts, setFile }) {
 
   useEffect(() => {
     import("../WorldPreview/WorldPreview").then((imported) => {
-      console.log("componento", imported.default);
       setComponent(() => imported.default);
     });
   }, []);

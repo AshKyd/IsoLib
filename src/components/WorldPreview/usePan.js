@@ -6,14 +6,8 @@ export function usePan(initialTranslate = [0, 0], zoom = 1) {
   const startTime = useRef(null);
   const inputEvent = useRef(null);
 
-  const [isDragging, setIsDragging] = useState(false);
-  function mouseDown() {
-    setIsDragging(true);
-  }
-
-  /** FIXME: Pretty sure there's a simpler and more accurate way */
   function handler(e, action) {
-    const cursorPos = [e.clientX, e.clientY];
+    const cursorPos = [e.clientX || e.layerX, e.clientY || e.layerY];
     switch (action) {
       case "start":
         startTime.current = Date.now();
@@ -22,10 +16,9 @@ export function usePan(initialTranslate = [0, 0], zoom = 1) {
       case "stop":
       case "move":
         if (!startPos.current) return false;
-        var period = Date.now() - startTime.current;
 
-        var xOffset = startPos.current[0] - cursorPos[0];
-        var yOffset = startPos.current[1] - cursorPos[1];
+        const xOffset = startPos.current[0] - cursorPos[0];
+        const yOffset = startPos.current[1] - cursorPos[1];
         setTranslate((translate) => [
           translate[0] + xOffset / zoom,
           translate[1] + yOffset / zoom,

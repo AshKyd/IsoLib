@@ -17,7 +17,6 @@ const TILE_COUNT = 6;
 const CENTRE_OFFSET = (TILE_COUNT * TILE_WIDTH) / 4 + TILE_WIDTH / 4;
 
 export default function WorldPreview(props) {
-  console.log("props", props, arguments);
   const { dims, svg, zoom, svgKey } = props;
   const gameRoot = useRef();
   const [game, setGame] = useState();
@@ -27,6 +26,8 @@ export default function WorldPreview(props) {
   const [oldSvgKey, setOldSvgKey] = useState();
   const [spriteIndex, setSpriteIndex] = useState(0);
   const ceilZoom = Math.ceil(zoom) * window.devicePixelRatio;
+
+  console.log("translate", translate);
 
   useEffect(() => {
     if (!isLoaded) {
