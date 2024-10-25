@@ -25,7 +25,6 @@ export default function WorldPreview({ dims, svg, zoom, svgKey }) {
   const [oldSvgKey, setOldSvgKey] = useState();
   const [spriteIndex, setSpriteIndex] = useState(0);
   const ceilZoom = Math.ceil(zoom) * window.devicePixelRatio;
-  console.log({ ceilZoom });
 
   useEffect(() => {
     if (!isLoaded) {
