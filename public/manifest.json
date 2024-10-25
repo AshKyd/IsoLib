@@ -1,0 +1,17 @@
+{
+    "short_name": "IsoLib",
+    "name": "IsoLib",
+    "icons": [
+      {
+        "src": "/favicon.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any maskable"
+      }}
+    ],
+    "start_url": "/?utm_source=pwa",
+    "background_color": "black",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#0700aa"
+  }
