@@ -7,11 +7,14 @@ export function usePan(initialTranslate = [0, 0], zoom = 1) {
   const inputEvent = useRef(null);
 
   function handler(e, action) {
-    const cursorPos = [e.clientX || e.layerX, e.clientY || e.layerY];
+    const target = e.touches?.[0] || e;
+    const cursorPos = [target.clientX, target.clientY];
+    console.log({ e });
     switch (action) {
       case "start":
         startTime.current = Date.now();
         startPos.current = cursorPos;
+        e.preventDefault();
         break;
       case "stop":
       case "move":
