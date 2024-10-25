@@ -5,6 +5,7 @@ import { Preview } from "./components/Preview/Preview";
 import Toolbar from "./components/Toolbar/Toolbar";
 import { useEffect, useState } from "preact/hooks";
 import Picker from "./components/Picker/Picker";
+import Interstitial from "./components/Interstitial/Interstitial";
 
 export function App() {
   const [opts, setOpts] = useState({});
@@ -12,6 +13,7 @@ export function App() {
   const [fileUrl, setFileUrl] = useState(null);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(true);
 
   useEffect(() => {
     if (!fileUrl) {
@@ -24,46 +26,50 @@ export function App() {
   }, [fileUrl]);
 
   return (
-    <div class="isolib-app">
-      <Toolbar
-        value={opts}
-        onChange={setOpts}
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
-      <div class="error">{!!error && error.message}</div>
-      <div class="isolib-app__main">
-        <div
-          class={[
-            "isolib-app__main-child",
-            sidebarOpen && "isolib-app__main-child--sidebar",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-        >
-          <div class="isolib-app__sidebar">
-            <Picker
-              value={fileUrl}
-              onChange={(val) => {
-                setFileUrl(val);
-                setSidebarOpen(false);
-              }}
-              onError={setError}
-            />
-          </div>
-          <div class="isolib-app__preview">
-            <Preview
-              file={file}
-              setFile={(file) => {
-                setFile(file);
-                setFileUrl(null);
-              }}
-              opts={opts}
-            />
+    <>
+      {modalOpen && <Interstitial onClose={() => setModalOpen(false)} />}
+      <div class="isolib-app">
+        <Toolbar
+          value={opts}
+          onChange={setOpts}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          setModalOpen={setModalOpen}
+        />
+        <div class="error">{!!error && error.message}</div>
+        <div class="isolib-app__main">
+          <div
+            class={[
+              "isolib-app__main-child",
+              sidebarOpen && "isolib-app__main-child--sidebar",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
+            <div class="isolib-app__sidebar">
+              <Picker
+                value={fileUrl}
+                onChange={(val) => {
+                  setFileUrl(val);
+                  setSidebarOpen(false);
+                }}
+                onError={setError}
+              />
+            </div>
+            <div class="isolib-app__preview">
+              <Preview
+                file={file}
+                setFile={(file) => {
+                  setFile(file);
+                  setFileUrl(null);
+                }}
+                opts={opts}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

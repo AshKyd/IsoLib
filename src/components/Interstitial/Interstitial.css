@@ -1,0 +1,69 @@
+.isolib-interstitial {
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100dvh;
+  backdrop-filter: blur(0.2rem);
+}
+.isolib-interstitial__modal:backdrop {
+  background: rgba(0, 0, 10, 0.3);
+}
+.isolib-interstitial__modal {
+  padding: 0;
+  width: 640px;
+  max-width: 80%;
+  height: 480px;
+  max-height: 80dvh;
+  background: var(--il-background);
+  color: var(--il-color);
+  border: 1px solid var(--il-panel-border);
+  box-shadow: 0 0.5rem 1rem #000;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.isolib-interstitial__bar {
+  background: var(--il-panel-background);
+  border-top: 1px solid var(--il-panel-border);
+}
+.isolib-interstitial__container {
+  padding: 1rem;
+}
+
+.isolib-interstitial h1 {
+  margin: 0;
+}
+
+.isolib-interstitial__top {
+  padding: 1.5rem 1rem 0.2rem;
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--il-panel-border);
+  background: var(--il-toolbar-background);
+}
+
+.isolib-interstitial__content {
+  flex: 1;
+  position: relative;
+}
+
+.isolib-interstitial__content .isolib-interstitial__container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.isolib-interstitial button {
+  padding: 0.5rem;
+  min-width: 5.5rem;
+  margin: 0 0 0 auto;
+  display: block;
+  cursor: pointer;
+}

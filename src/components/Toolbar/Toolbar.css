@@ -16,6 +16,19 @@
   align-items: center;
   gap: 0.5rem;
 }
+.isolib-toolbar__flex {
+  flex: 1;
+}
+.isolib-toolbar__button {
+  min-width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.isolib-toolbar__button:hover,
+.isolib-toolbar__button:focus {
+  cursor: pointer;
+}
 
 .isolib-toolbar__title {
   font-size: inherit;

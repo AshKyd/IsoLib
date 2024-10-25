@@ -22,6 +22,7 @@ export default function Toolbar({
   onChange,
   sidebarOpen,
   setSidebarOpen,
+  setModalOpen,
 }) {
   useEffect(() => {
     if (!Object.keys(value).length) onChange(DEFAULTS);
@@ -104,6 +105,16 @@ export default function Toolbar({
           step={0.1}
         />
       </label>
+      <div class="isolib-toolbar__flex"></div>
+      <button
+        className="isolib-toolbar__button"
+        onClick={(e) => {
+          e.preventDefault();
+          setModalOpen(true);
+        }}
+      >
+        ⓘ
+      </button>
     </form>
   );
 }
