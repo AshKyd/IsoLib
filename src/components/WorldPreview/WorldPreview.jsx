@@ -16,7 +16,9 @@ const TILE_COUNT = 6;
 
 const CENTRE_OFFSET = (TILE_COUNT * TILE_WIDTH) / 4 + TILE_WIDTH / 4;
 
-export default function WorldPreview({ dims, svg, zoom, svgKey }) {
+export default function WorldPreview(props) {
+  console.log("props", props, arguments);
+  const { dims, svg, zoom, svgKey } = props;
   const gameRoot = useRef();
   const [game, setGame] = useState();
   const [isLoaded, setIsLoaded] = useState();

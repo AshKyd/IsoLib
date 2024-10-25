@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { paint } from "../../lib/recolour";
-import WorldPreview from "../WorldPreview/WorldPreview";
 
 function useDragDrop() {
   const [status, setStatus] = useState("ready");
@@ -36,12 +35,19 @@ function useDragDrop() {
 
 export function Preview({ file, opts, setFile }) {
   const [onDrag, onDragLeave, onDrop, _svg, status] = useDragDrop();
+  const [Component, setComponent] = useState();
   const zoom = opts.zoom || 1;
 
   const [recolouredFile, setRecolouredFile] = useState(null);
-  const canvasRef = useRef();
 
   const [dims, setDims] = useState({ width: 100, height: 100 });
+
+  useEffect(() => {
+    import("../WorldPreview/WorldPreview").then((imported) => {
+      console.log("componento", imported.default);
+      setComponent(() => imported.default);
+    });
+  }, []);
 
   useEffect(() => setFile(file), [file]);
 
@@ -68,19 +74,6 @@ export function Preview({ file, opts, setFile }) {
     });
     observer.observe(document.querySelector(".isolib-app__main"));
     observer.observe(document.querySelector(".isolib-app__preview"));
-
-    // const listener = () => {
-    //   const rect = document
-    //     .querySelector(".isolib-app__preview")
-    //     .getBoundingClientRect();
-    //   setDims({
-    //     width: rect.width * window.devicePixelRatio,
-    //     height: rect.height * window.devicePixelRatio,
-    //   });
-    // };
-    // listener();
-    // window.addEventListener("resize", listener);
-
     return () => observer.disconnect();
   }, []);
 
@@ -97,13 +90,8 @@ export function Preview({ file, opts, setFile }) {
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      {recolouredFile && (
-        <WorldPreview
-          dims={dims}
-          svg={recolouredFile}
-          svgKey={file}
-          zoom={zoom}
-        />
+      {recolouredFile && Component && (
+        <Component dims={dims} svg={recolouredFile} svgKey={file} zoom={zoom} />
       )}
     </div>
   );
