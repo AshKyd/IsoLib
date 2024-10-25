@@ -11,7 +11,7 @@ create many colour variations of the same sprite. Furthermore, the demo
 manages a filter over the overall colours in order to create night and
 day variations.
 
-![The screenshot shows a sprite colourised per the interface](screenshot.webp)
+![The screenshot shows a sprite colourised per the interface](public/screenshot.webp)
 
 ## The Code
 
@@ -23,7 +23,6 @@ code:
     	secondary : '#0000ff',
     	time : 13
     });
-
 
 This demo recolours one of the image templates to be a primarily red
 sprite with blue highlight colours as it would appear at 1 PM.
