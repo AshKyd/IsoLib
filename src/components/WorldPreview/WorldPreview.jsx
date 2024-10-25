@@ -5,6 +5,7 @@ import {
   browserGetCanvas,
   browserLoadCanvas,
   browserLoadImage,
+  getBase64Url,
   getLoc,
 } from "../../lib/util";
 import { tileify } from "../../lib/tileify";
@@ -15,12 +16,16 @@ const TILE_COUNT = 6;
 
 const CENTRE_OFFSET = (TILE_COUNT * TILE_WIDTH) / 4 + TILE_WIDTH / 4;
 
-export default function WorldPreview({ dims, svg, zoom }) {
+export default function WorldPreview({ dims, svg, zoom, svgKey }) {
   const gameRoot = useRef();
   const [game, setGame] = useState();
   const [isLoaded, setIsLoaded] = useState();
   const [sprite, setSprite] = useState();
   const [handlers, translate, setTranslate] = usePan([0, 0], zoom);
+  const [oldSvgKey, setOldSvgKey] = useState();
+  const [spriteIndex, setSpriteIndex] = useState(0);
+  const ceilZoom = Math.ceil(zoom) * window.devicePixelRatio;
+  console.log({ ceilZoom });
 
   useEffect(() => {
     if (!isLoaded) {
@@ -33,7 +38,6 @@ export default function WorldPreview({ dims, svg, zoom }) {
     if (!isLoaded) {
       return;
     }
-    console.log("translating", translate);
     game.scene.scenes[0].cameras.main.setScroll(...translate);
   }, [translate, isLoaded]);
 
@@ -64,7 +68,6 @@ export default function WorldPreview({ dims, svg, zoom }) {
 
       scene.load.start();
       loader.once("complete", () => {
-        console.log("completed loading basetile");
         for (let x = 0; x < TILE_COUNT; x++) {
           for (let y = 0; y < TILE_COUNT; y++) {
             const [tileX, tileY] = getLoc(TILE_WIDTH, x, y, 0);
@@ -84,26 +87,28 @@ export default function WorldPreview({ dims, svg, zoom }) {
 
   useEffect(() => {
     if (!isLoaded) return;
+    (async () => {
+      const spriteUrl = getBase64Url(svg);
+      const scene = game.scene.scenes[0];
+      const nadir = await getNadir(svg);
 
-    browserLoadImage({ svg })
-      .then(browserGetCanvas)
-      .then((canvas) => canvas.convertToBlob())
-      .then((blob) => URL.createObjectURL(blob))
-      .then(async (spriteUrl) => {
-        const scene = game.scene.scenes[0];
-        const nadir = await getNadir(svg);
-        console.log({ nadir });
+      const spriteName = "sprite" + spriteIndex;
+      const loader = scene.load.svg(spriteName, spriteUrl, { scale: ceilZoom });
+      setSpriteIndex(spriteIndex + 1);
+      scene.load.start();
+      loader.once("complete", () => {
         if (sprite) {
           sprite.destroy();
-          scene.textures.remove("sprite");
+          // FIXME: potential memory leak when race condition hit
+          scene.textures.remove("sprite" + (spriteIndex - 1));
         }
 
-        const loader = scene.load.image("sprite", spriteUrl);
-        scene.load.start();
-        loader.once("complete", () => {
-          const { width, height } = scene.textures.get("sprite").frames.__BASE;
-          const [spriteX, spriteY] = getLoc(TILE_WIDTH, 3, 3, 0);
-          const emitter1 = scene.add.particles(
+        const { width, height } = scene.textures.get("sprite").frames.__BASE;
+        const [spriteX, spriteY] = getLoc(TILE_WIDTH, 3, 3, 0);
+        const transition = oldSvgKey !== svgKey;
+        const emitter1 =
+          transition &&
+          scene.add.particles(
             spriteX + CENTRE_OFFSET,
             spriteY - height / 2,
             "particle-dust",
@@ -118,27 +123,29 @@ export default function WorldPreview({ dims, svg, zoom }) {
               lifespan: 2000,
             }
           );
-          const sprite = scene.add.image(
-            spriteX + CENTRE_OFFSET,
-            spriteY,
-            "sprite"
-          );
-          sprite.setOrigin(...nadir);
-          setSprite(sprite);
+        const newSprite = scene.add.image(
+          spriteX + CENTRE_OFFSET,
+          spriteY,
+          spriteName
+        );
+        newSprite.setOrigin(...nadir);
+        newSprite.scale = 1 / ceilZoom;
+        setSprite(newSprite);
 
-          sprite.alpha = 0;
-          sprite.scale = 0.9;
+        if (transition) {
+          newSprite.alpha = 0;
 
           scene.add.tween({
-            targets: sprite,
+            targets: newSprite,
             alpha: 1,
-            scale: 1,
             duration: 500,
             delay: 200,
             ease: "Cubic",
           });
-
-          const emitter2 = scene.add.particles(
+        }
+        const emitter2 =
+          transition &&
+          scene.add.particles(
             spriteX + CENTRE_OFFSET,
             spriteY - height / 2,
             "particle-yellow",
@@ -158,7 +165,9 @@ export default function WorldPreview({ dims, svg, zoom }) {
               delay: 150,
             }
           );
-          const emitter3 = scene.add.particles(
+        const emitter3 =
+          transition &&
+          scene.add.particles(
             spriteX + CENTRE_OFFSET,
             spriteY - height / 2,
             "particle-yellow",
@@ -175,14 +184,17 @@ export default function WorldPreview({ dims, svg, zoom }) {
               gravityY: 200,
             }
           );
+        if (transition) {
           emitter1.on("complete", () => {
             emitter1.destroy();
             emitter2.destroy();
             emitter3.destroy();
           });
-        });
+        }
+        setOldSvgKey(svgKey);
       });
-  }, [isLoaded, svg]);
+    })();
+  }, [isLoaded, svg, ceilZoom]);
 
   useEffect(() => {
     if (game) {

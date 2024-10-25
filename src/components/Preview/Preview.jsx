@@ -98,7 +98,12 @@ export function Preview({ file, opts, setFile }) {
       onDrop={onDrop}
     >
       {recolouredFile && (
-        <WorldPreview dims={dims} svg={recolouredFile} zoom={zoom} />
+        <WorldPreview
+          dims={dims}
+          svg={recolouredFile}
+          svgKey={file}
+          zoom={zoom}
+        />
       )}
     </div>
   );

@@ -1,3 +1,6 @@
+export function getBase64Url(svg) {
+  return "data:image/svg+xml;base64," + btoa(svg || "");
+}
 export function browserLoadImage({ src, svg }) {
   return new Promise((resolve, reject) => {
     const img = document.createElement("img");
@@ -6,7 +9,7 @@ export function browserLoadImage({ src, svg }) {
       reject(e);
     });
     img.addEventListener("load", () => resolve(img));
-    img.src = src || "data:image/svg+xml;base64," + btoa(svg || "");
+    img.src = src || getBase64Url(svg);
   });
 }
 
