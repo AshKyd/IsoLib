@@ -13,7 +13,23 @@ export function App() {
   const [fileUrl, setFileUrl] = useState(null);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(
+    (() => {
+      try {
+        return !localStorage.modalDismissed;
+      } catch (e) {
+        return true;
+      }
+    })()
+  );
+
+  useEffect(() => {
+    if (!modalOpen) {
+      try {
+        localStorage.modalDismissed = true;
+      } catch (e) {}
+    }
+  }, [modalOpen]);
 
   useEffect(() => {
     if (!fileUrl) {
