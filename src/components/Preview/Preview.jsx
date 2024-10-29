@@ -43,7 +43,7 @@ export function Preview({ file, opts, setFile }) {
   const [dims, setDims] = useState({ width: 100, height: 100 });
 
   useEffect(() => {
-    import("../WorldPreview/WorldPreview").then((imported) => {
+    import("../GamePreview/GamePreview").then((imported) => {
       setComponent(() => imported.default);
     });
   }, []);
@@ -89,7 +89,7 @@ export function Preview({ file, opts, setFile }) {
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      {recolouredFile && Component && (
+      {Component && (
         <Component dims={dims} svg={recolouredFile} svgKey={file} zoom={zoom} />
       )}
     </div>

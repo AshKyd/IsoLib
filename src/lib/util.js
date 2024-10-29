@@ -25,6 +25,13 @@ export async function browserLoadCanvas(props) {
   return browserGetCanvas(img);
 }
 
+export async function fetchAsImageBitmap({ src }) {
+  const response = await fetch(src);
+  const blob = await response.blob();
+  const imageBitmap = await createImageBitmap(blob);
+  return imageBitmap;
+}
+
 /**
  * Get x,y coordinates of a tile location.
  */

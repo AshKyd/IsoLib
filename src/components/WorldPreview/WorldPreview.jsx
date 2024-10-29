@@ -27,8 +27,6 @@ export default function WorldPreview(props) {
   const [spriteIndex, setSpriteIndex] = useState(0);
   const ceilZoom = Math.ceil(zoom) * window.devicePixelRatio;
 
-  console.log("translate", translate);
-
   useEffect(() => {
     if (!isLoaded) {
       return;
@@ -88,7 +86,8 @@ export default function WorldPreview(props) {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || !svg) return;
+    return;
     (async () => {
       const spriteUrl = getBase64Url(svg);
       const scene = game.scene.scenes[0];

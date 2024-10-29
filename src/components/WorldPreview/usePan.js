@@ -9,7 +9,6 @@ export function usePan(initialTranslate = [0, 0], zoom = 1) {
   function handler(e, action) {
     const target = e.touches?.[0] || e;
     const cursorPos = [target.clientX, target.clientY];
-    console.log({ e });
     switch (action) {
       case "start":
         startTime.current = Date.now();
