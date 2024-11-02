@@ -13,7 +13,7 @@ export async function render(sprite, engine) {
 
   console.log("starting", sprite.sourceUrl);
   const svg = await fetch(sprite.sourceUrl).then((res) => res.text());
-
+  console.log("painting", engine.time);
   const paintedSvg = paint(svg, {
     flip: false,
     primary,

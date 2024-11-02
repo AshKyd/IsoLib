@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import { EngineInterface } from "../../engine";
 import { usePan } from "../WorldPreview/usePan";
+let alreadyLoaded = false;
 
 export default function GamePreview({ fileUrl, opts }) {
   const gameRoot = useRef();
@@ -8,11 +9,19 @@ export default function GamePreview({ fileUrl, opts }) {
   const [handlers, translate, setTranslate] = usePan([0, 0], opts.zoom);
 
   useEffect(() => {
+    if (alreadyLoaded) {
+      location.reload();
+    }
+    alreadyLoaded = true;
+  }, []);
+
+  useEffect(() => {
     if (!engine) return;
     const { flip, time, zoom } = opts;
+    console.log("setting time", opts.time);
     engine.setProps({ flip, time, zoom, translate });
     engine.scene.cameras.main.setScroll(...translate);
-  }, [translate, opts.zoom, engine]);
+  }, [translate, opts, engine]);
 
   useEffect(() => {
     if (fileUrl && engine) {
@@ -30,7 +39,7 @@ export default function GamePreview({ fileUrl, opts }) {
         },
       });
     }
-  }, [fileUrl]);
+  }, [fileUrl, opts]);
 
   useEffect(() => {
     const engine = new EngineInterface(gameRoot.current, {
