@@ -26,7 +26,6 @@ export function browserGetCanvas(img) {
 export async function svg2Canvas(svg) {
   const canvas = new OffscreenCanvas(100, 100);
   const ctx = canvas.getContext("2d");
-  console.log({ DOMParser });
   const v = await canvg.Canvg.from(
     ctx,
     svg,

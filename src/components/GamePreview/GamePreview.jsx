@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { EngineInterface, EngineScene } from "../../engine";
-import * as Phaser from "phaser";
+import { EngineInterface } from "../../engine";
 import { usePan } from "../WorldPreview/usePan";
-import { getBase64Url } from "../../lib/util";
 
 export default function GamePreview({ fileUrl, opts }) {
   const gameRoot = useRef();
