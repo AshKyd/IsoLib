@@ -13,7 +13,7 @@ export class EngineScene extends Phaser.Scene {
 
 export class EngineInterface {
   spritesById = {};
-  constructor(gameRoot) {
+  constructor(gameRoot, options) {
     this.game = new Phaser.Game({
       type: Phaser.AUTO,
       width: 800,
@@ -31,14 +31,29 @@ export class EngineInterface {
       type: "module",
     });
     this.worker.addEventListener("message", (message) => {
-      console.log("received message");
+      console.log("received message", message.data);
       const [method, payload] = message.data;
       this[method](payload);
     });
+    this.setProps(options);
+    this.request("init");
   }
 
   get scene() {
     return this.game.scene.scenes[0];
+  }
+  set zoom(zoom) {
+    console.log("setting zoomies");
+    this.scene.cameras.main.setZoom(zoom);
+  }
+
+  setProps({ sync = true, ...props }) {
+    Object.keys(props).forEach((prop) => (this[prop] = props[prop]));
+    // Object.assign(this, props);
+    console.log("setting props", Object.keys(props));
+    if (sync) {
+      this.request("setProps", { ...props, sync: false });
+    }
   }
 
   request(method, payload) {

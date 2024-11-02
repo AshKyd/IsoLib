@@ -12,10 +12,9 @@ export default function GamePreview({ fileUrl, opts }) {
   useEffect(() => {
     if (!engine) return;
     const { flip, time, zoom } = opts;
-    engine.request("setProps", { flip, time, zoom, translate });
-    console.log("scrolling", translate);
+    engine.setProps({ flip, time, zoom, translate });
     engine.scene.cameras.main.setScroll(...translate);
-  }, [translate, zoom, engine]);
+  }, [translate, opts.zoom, engine]);
 
   useEffect(() => {
     if (fileUrl && engine) {
@@ -25,7 +24,7 @@ export default function GamePreview({ fileUrl, opts }) {
         id: "main",
         sourceUrl: fileUrl,
         origin: [0.5, 1],
-        pos: [0, 0],
+        tilePos: [4, 4],
         opts: {
           primary,
           secondary,
@@ -36,7 +35,10 @@ export default function GamePreview({ fileUrl, opts }) {
   }, [fileUrl]);
 
   useEffect(() => {
-    const engine = new EngineInterface(gameRoot.current);
+    const engine = new EngineInterface(gameRoot.current, {
+      tileWidth: 256,
+      tilecount: 7,
+    });
     setEngine(() => engine);
   }, [gameRoot]);
   return <div ref={gameRoot} {...handlers}></div>;

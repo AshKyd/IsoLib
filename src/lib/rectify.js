@@ -25,13 +25,8 @@ export function getDims(svg) {
   });
 }
 
-export async function getNadir(svg) {
-  const canvas = new OffscreenCanvas(100, 100);
+export function getNadir(canvas) {
   const context = canvas.getContext("2d");
-  console.log("getNadir", { canvg });
-  const v = await canvg.Canvg.fromString(context, svg, {});
-  await v.render();
-
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
 
   for (let i = pixels.data.length - 4; i >= 0; i -= 4) {
