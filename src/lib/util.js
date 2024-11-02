@@ -1,3 +1,6 @@
+import { DOMParser } from "xmldom";
+import * as canvg from "canvg";
+
 export function getBase64Url(svg) {
   return "data:image/svg+xml;base64," + btoa(svg || "");
 }
@@ -17,6 +20,20 @@ export function browserGetCanvas(img) {
   const canvas = new OffscreenCanvas(img.width, img.height);
   const context = canvas.getContext("2d");
   context.drawImage(img, 0, 0);
+  return canvas;
+}
+
+export async function svg2Canvas(svg) {
+  const canvas = new OffscreenCanvas(100, 100);
+  const ctx = canvas.getContext("2d");
+  const v = await canvg.Canvg.from(
+    ctx,
+    svg,
+    canvg.presets.offscreen({
+      DOMParser,
+    })
+  );
+  await v.render();
   return canvas;
 }
 

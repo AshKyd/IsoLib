@@ -33,12 +33,11 @@ function useDragDrop() {
   return [onDrag, onDragLeave, onDrop, file, status];
 }
 
-export function Preview({ file, opts, setFile }) {
+export function Preview({ fileUrl, opts, setFile }) {
   const [onDrag, onDragLeave, onDrop, _svg, status] = useDragDrop();
+
   const [Component, setComponent] = useState();
   const zoom = opts.zoom || 1;
-
-  const [recolouredFile, setRecolouredFile] = useState(null);
 
   const [dims, setDims] = useState({ width: 100, height: 100 });
 
@@ -48,16 +47,7 @@ export function Preview({ file, opts, setFile }) {
     });
   }, []);
 
-  useEffect(() => setFile(file), [file]);
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
-
-    const newFile = paint(file, opts);
-    setRecolouredFile(newFile);
-  }, [file, opts]);
+  // useEffect(() => setFile(_svg), [_svg]);
 
   // update dims on window resize
   useEffect(() => {
@@ -90,7 +80,7 @@ export function Preview({ file, opts, setFile }) {
       onDrop={onDrop}
     >
       {Component && (
-        <Component dims={dims} svg={recolouredFile} svgKey={file} zoom={zoom} />
+        <Component dims={dims} fileUrl={fileUrl} zoom={zoom} opts={opts} />
       )}
     </div>
   );

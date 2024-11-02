@@ -13,10 +13,13 @@
 		"npm": "^10.9.0",
 		"phaser": "^3.86.0",
 		"preact": "^10.22.1",
-		"sax": "^1.4.1"
+		"sax": "^1.4.1",
+		"vite-plugin-resolve": "^2.5.2",
+		"xmldom": "^0.6.0"
 	},
 	"devDependencies": {
 		"@preact/preset-vite": "^2.9.0",
+		"process": "^0.11.10",
 		"vite": "^5.3.3"
 	}
 }

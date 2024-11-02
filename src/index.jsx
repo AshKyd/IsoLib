@@ -6,11 +6,13 @@ import Toolbar from "./components/Toolbar/Toolbar";
 import { useEffect, useState } from "preact/hooks";
 import Picker from "./components/Picker/Picker";
 import Interstitial from "./components/Interstitial/Interstitial";
+import { getBase64Url } from "./lib/util";
 
 export function App() {
   const [opts, setOpts] = useState({});
-  const [file, setFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
+
+  console.log({ fileUrl });
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(
@@ -30,16 +32,6 @@ export function App() {
       } catch (e) {}
     }
   }, [modalOpen]);
-
-  useEffect(() => {
-    if (!fileUrl) {
-      return;
-    }
-    fetch(fileUrl)
-      .then((res) => res.text())
-      .then(setFile)
-      .catch(setError);
-  }, [fileUrl]);
 
   return (
     <>
@@ -74,10 +66,9 @@ export function App() {
             </div>
             <div class="isolib-app__preview">
               <Preview
-                file={file}
+                fileUrl={fileUrl}
                 setFile={(file) => {
-                  setFile(file);
-                  setFileUrl(null);
+                  setFileUrl(getBase64Url(file));
                 }}
                 opts={opts}
               />

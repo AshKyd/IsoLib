@@ -81,7 +81,7 @@ function recolorEvening(str, oldColor, time, opts) {
     }
 
     if (
-      (typeof opts.alwayslightup != "undefined" && opts.alwayslightup) ||
+      (typeof opts.alwaysLightUp != "undefined" && opts.alwaysLightUp) ||
       colorEq(oldColor, colourWindows.nightLight)
     ) {
       return colourWindows.nightLight + ";";
@@ -109,7 +109,7 @@ function recolorEvening(str, oldColor, time, opts) {
 
 export function paint(
   svg,
-  { flip, primary, secondary, time, alwayslightup = false }
+  { flip, primary, secondary, time, alwaysLightUp = false }
 ) {
   var flipped = flip ? "Alt" : "";
   svg = recolour(svg, "primary" + flipped, primary);
@@ -119,7 +119,7 @@ export function paint(
 
   if (time) {
     svg = svg.replace(/(#[a-fA-F0-9]{6});/g, function (a, b) {
-      return recolorEvening(a, b, hourOfDay, { alwayslightup });
+      return recolorEvening(a, b, hourOfDay, { alwaysLightUp });
     });
   }
 

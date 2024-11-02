@@ -6,7 +6,7 @@ const DEFAULTS = {
   primary: "#aaaaaa",
   secondary: "#6BBBF5",
   time: 1000 * 60 * 60 * 12,
-  alwayslightup: false,
+  alwaysLightUp: false,
   zoom: 1,
 };
 

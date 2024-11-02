@@ -1,4 +1,4 @@
-import * as Canvg from "canvg";
+import * as canvg from "canvg";
 import sax from "sax";
 
 export function getDims(svg) {
@@ -28,7 +28,8 @@ export function getDims(svg) {
 export async function getNadir(svg) {
   const canvas = new OffscreenCanvas(100, 100);
   const context = canvas.getContext("2d");
-  const v = await Canvg.Canvg.fromString(context, svg, {});
+  console.log("getNadir", { canvg });
+  const v = await canvg.Canvg.fromString(context, svg, {});
   await v.render();
 
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height);

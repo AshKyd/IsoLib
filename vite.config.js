@@ -1,9 +1,16 @@
 import { defineConfig } from "vite";
 import preact from "@preact/preset-vite";
+import resolve from "vite-plugin-resolve";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [preact()],
+  plugins: [
+    resolve({
+      raf: `
+        export default function raf(){}
+      `,
+    }),
+    preact(),
+  ],
   server: {
     host: "0.0.0.0",
   },
