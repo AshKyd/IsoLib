@@ -12,7 +12,7 @@ export class EngineScene extends Phaser.Scene {
 }
 
 export class EngineInterface {
-  sprites = [];
+  spritesById = {};
   constructor(gameRoot) {
     this.game = new Phaser.Game({
       type: Phaser.AUTO,
@@ -45,15 +45,33 @@ export class EngineInterface {
     this.worker.postMessage([method, JSON.stringify(payload)]);
   }
 
+  async loadTexture(textureName, url) {
+    return new Promise((resolve) => {
+      const { scene } = this;
+
+      const loader = scene.load.image(textureName, url);
+      scene.load.start();
+      loader.once("complete", () => {
+        resolve(loader);
+      });
+    });
+  }
+
   /** Place or replace a sprite in the world */
   async placeSprite({ id, url, pos, origin }) {
-    console.log("placing sprite", arguments[0]);
     const { scene } = this;
-    const loader = scene.load.image(id, url);
-    scene.load.start();
-    loader.once("complete", () => {
-      const newSprite = scene.add.image(pos[0], pos[1], id);
-      newSprite.setOrigin(...origin);
-    });
+    const textureName = String(url);
+
+    await this.loadTexture(textureName, url);
+
+    const existingSprite = this.spritesById[id];
+    if (existingSprite) {
+      existingSprite.sprite.destroy();
+      // FIXME: this works for now, but in future we must first check if another sprite is using the same texture.
+      scene.textures.remove(existingSprite.texture);
+    }
+    const newSprite = scene.add.image(pos[0], pos[1], textureName);
+    newSprite.setOrigin(...origin);
+    this.spritesById[id] = { sprite: newSprite, texture: textureName };
   }
 }
