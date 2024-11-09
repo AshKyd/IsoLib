@@ -37,6 +37,34 @@ export class EngineInterface {
     });
     this.setProps(options);
     this.request("init");
+
+    console.log(this.game, this.game.scene.scenes[0]);
+
+    this.game.events.once("ready", async () => {
+      [
+        "gameobjectdown",
+        "gameobjectup",
+        "gameobjectmove",
+        "gameobjectover",
+        "gameobjectout",
+        "pointerdown",
+        "pointerup",
+      ].forEach((eventName) =>
+        this.game.scene.scenes[0].input.on(
+          eventName,
+          (pointer, gameObject, event) => {
+            const { downX, downY, isDown, deltaX, deltaY } = pointer;
+            console.log(eventName, { pointer, gameObject, event });
+
+            this.request("inputEvent", {
+              eventName,
+              props: { downX, downY, isDown, deltaX, deltaY },
+            });
+          },
+          this.game
+        )
+      );
+    });
   }
 
   get scene() {

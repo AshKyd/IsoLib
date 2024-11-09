@@ -48,6 +48,11 @@ class Engine {
     }
   }
 
+  inputEvent({ eventName, props }) {
+    const { downX, downY, isDown, deltaX, deltaY } = props;
+    console.log("worker received event", eventName, props);
+  }
+
   request(method, payload) {
     postMessage([method, payload]);
   }
