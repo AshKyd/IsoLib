@@ -21,7 +21,7 @@ export default function GamePreview({ fileUrl, opts }) {
     console.log("setting time", opts.time);
     engine.setProps({ flip, time, zoom, translate });
     engine.scene.cameras.main.setScroll(...translate);
-  }, [translate, opts, engine]);
+  }, [translate[0], translate[1], opts.time, opts.flip, opts.zoom, engine]);
 
   useEffect(() => {
     if (fileUrl && engine) {

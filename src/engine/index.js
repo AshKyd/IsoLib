@@ -79,6 +79,7 @@ export class EngineInterface {
     Object.keys(props).forEach((prop) => (this[prop] = props[prop]));
     // Object.assign(this, props);
     console.log("setting props", Object.keys(props));
+    console.trace();
     if (sync) {
       this.request("setProps", { ...props, sync: false });
     }
